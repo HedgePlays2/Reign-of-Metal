@@ -1,0 +1,53 @@
+name: Build and deploy Reign of Metal
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Reign of Metal
+        uses: actions/checkout@v4
+
+      - name: Prepare GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Download pinned WebSonic engine
+        env:
+          WEbSONIC_COMMIT: 356bf6ce9760076f060a458075219f2f22e2162a
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            "https://github.com/coreh-deprecated/WebSonic/archive/${WEbSONIC_COMMIT}.zip" \
+            --output /tmp/websonic.zip
+          mkdir -p /tmp/websonic
+          unzip -q /tmp/websonic.zip -d /tmp/websonic
+          mkdir -p engine/websonic
+          cp -a "/tmp/websonic/WebSonic-${WEbSONIC_COMMIT}/." engine/websonic/
+          test -f engine/websonic/LICENSE
+          test -f engine/websonic/index.html
+          echo "WebSonic source staged from ${WEbSONIC_COMMIT}"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
