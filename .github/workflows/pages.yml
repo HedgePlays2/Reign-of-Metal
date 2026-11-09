@@ -45,6 +45,13 @@ jobs:
           test -f engine/websonic/index.html
           echo "WebSonic source staged from ${WEBSONIC_COMMIT}"
 
+      - name: Install Reign of Metal level blockout
+        run: |
+          set -euo pipefail
+          test -f levels/eggmans-factory.jsonlevel
+          cp levels/eggmans-factory.jsonlevel engine/websonic/level/lvl0.jsonlevel
+          echo "Installed Eggman's Factory blockout as the WebSonic starting level"
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
