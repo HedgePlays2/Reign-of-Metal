@@ -29,19 +29,19 @@ jobs:
 
       - name: Download pinned WebSonic engine
         env:
-          WEbSONIC_COMMIT: 356bf6ce9760076f060a458075219f2f22e2162a
+          WEBSONIC_COMMIT: 356bf6ce9760076f060a458075219f2f22e2162a
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 \
-            "https://github.com/coreh-deprecated/WebSonic/archive/${WEbSONIC_COMMIT}.zip" \
+            "https://github.com/coreh-deprecated/WebSonic/archive/${WEBSONIC_COMMIT}.zip" \
             --output /tmp/websonic.zip
           mkdir -p /tmp/websonic
           unzip -q /tmp/websonic.zip -d /tmp/websonic
           mkdir -p engine/websonic
-          cp -a "/tmp/websonic/WebSonic-${WEbSONIC_COMMIT}/." engine/websonic/
+          cp -a "/tmp/websonic/WebSonic-${WEBSONIC_COMMIT}/." engine/websonic/
           test -f engine/websonic/LICENSE
           test -f engine/websonic/index.html
-          echo "WebSonic source staged from ${WEbSONIC_COMMIT}"
+          echo "WebSonic source staged from ${WEBSONIC_COMMIT}"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
