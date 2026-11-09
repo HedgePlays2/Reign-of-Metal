@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a101b">
+<title>Reign of Metal — Level Editor</title>
+<style>
+:root{color-scheme:dark;--bg:#0a101b;--panel:#121d2d;--panel2:#19283c;--line:#2c405b;--text:#eef4ff;--muted:#9aabc2;--red:#f04455;--blue:#5ba8ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#203958 0,#0a101b 55%);color:var(--text);font:14px/1.45 system-ui,Segoe UI,Arial,sans-serif}
+header{padding:22px clamp(16px,4vw,42px) 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand small{color:#ff6977;letter-spacing:.2em;font-weight:800;font-size:10px}.brand h1{margin:3px 0 0;font-size:clamp(22px,4vw,32px);letter-spacing:-.04em}.brand p{margin:2px 0;color:var(--muted)}
+a{color:#8bc2ff}.top-actions,.actions{display:flex;gap:8px;flex-wrap:wrap}
+button,.file-label,select,input{font:inherit;color:var(--text);background:#1a2a40;border:1px solid #3a5271;border-radius:9px;padding:9px 12px}
+button,.file-label{cursor:pointer;font-weight:650}button:hover,.file-label:hover{background:#263c59;border-color:#6c9dd3}button.primary{background:#a92335;border-color:#e34b5c}button.primary:hover{background:#c42e42}button:disabled{opacity:.4;cursor:not-allowed}
+main{width:min(1450px,100%);margin:auto;padding:20px clamp(12px,3vw,30px) 42px}
+.notice{background:#18283d;border:1px solid #355071;border-radius:12px;padding:12px 15px;color:#c6d7ed;margin-bottom:16px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:16px;align-items:start}
+.panel{background:linear-gradient(160deg,#152338,#101927);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 15px 40px #0003}
+.panel-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.panel-head strong{font-size:15px}.muted{color:var(--muted)}
+.canvas-wrap{padding:14px;overflow:auto;max-height:75vh;background-color:#0c1420;background-image:linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px);background-size:24px 24px}
+canvas{display:block;max-width:none;touch-action:none;cursor:crosshair}
+.controls{padding:15px;display:grid;gap:15px}.group{display:grid;gap:7px}.group label{font-size:12px;color:#b8c8dc;font-weight:750;letter-spacing:.04em}.group select,.group input{width:100%}
+.layer-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center}.layer-row button{padding:8px 10px}
+.swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.swatch{padding:9px 5px;display:grid;justify-items:center;gap:5px;font-size:11px}.chip{width:25px;height:17px;border:1px solid #ffffff55;border-radius:4px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#0d1725;border:1px solid #293d57;border-radius:9px;padding:9px}.stat b{display:block;font-size:19px}.stat span{color:var(--muted);font-size:11px}
+hr{border:0;border-top:1px solid var(--line);width:100%}.help{color:var(--muted);font-size:12px;line-height:1.55}.file-input{display:none}.status{font-size:12px;color:#a9c5e7;min-height:18px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.controls{grid-template-columns:repeat(2,minmax(0,1fr))}.controls .wide{grid-column:1/-1}}
+@media(max-width:520px){.controls{grid-template-columns:1fr}.top-actions{width:100%}.top-actions>*{flex:1}}
+</style>
+</head>
+<body>
+<header><div class="brand"><small>REIGN OF METAL · DEV TOOLS</small><h1>Level Editor</h1><p>Eggman's Factory — tile-map workshop</p></div><div class="top-actions"><a href="../" style="align-self:center;margin-right:8px">← Project home</a><button id="loadDefault">Load factory map</button><label class="file-label" for="importFile">Import JSON</label><input class="file-input" id="importFile" type="file" accept=".json,.jsonlevel,application/json"><button class="primary" id="download">Export .jsonlevel</button></div></header>
+<main>
+<div class="notice"><b>How it works:</b> choose a height layer, select a surface, then click or drag on the grid to paint. <b>Export</b> downloads a WebSonic-compatible level file. It does not publish changes to GitHub automatically.</div>
+<div class="layout">
+<section class="panel"><div class="panel-head"><strong id="layerTitle">Layer 0 · Top-down view</strong><span class="muted" id="gridSize">—</span></div><div class="canvas-wrap"><canvas id="map" width="900" height="700" aria-label="Level tile grid"></canvas></div></section>
+<aside class="panel"><div class="panel-head"><strong>Build tools</strong><span class="muted">WebSonic JSON</span></div>
+<div class="controls">
+<div class="group wide"><label for="levelName">LEVEL NAME</label><input id="levelName" value="Eggman's Factory — Blockout 01"></div>
+<div class="group wide"><label>HEIGHT LAYER (Y)</label><div class="layer-row"><input id="layer" type="range" min="0" max="10" value="0"><button id="prevLayer" title="Previous layer">−</button><button id="nextLayer" title="Next layer">+</button></div><div class="muted" id="layerReadout">0 / 10</div></div>
+<div class="group wide"><label>PAINT SURFACE</label><div class="swatches" id="surfaces"></div></div>
+<div class="group"><label for="brush">BRUSH</label><select id="brush"><option value="1">1 × 1</option><option value="2">2 × 2</option><option value="3">3 × 3</option><option value="5">5 × 5</option></select></div>
+<div class="group"><label for="tool">TOOL</label><select id="tool"><option value="paint">Paint</option><option value="erase">Erase</option></select></div>
+<div class="group wide"><div class="stats"><div class="stat"><b id="tileCount">0</b><span>Occupied tiles</span></div><div class="stat"><b id="layerCount">0</b><span>Tiles on this layer</span></div></div></div>
+<div class="group wide"><label>QUICK ACTIONS</label><button id="fillLayer">Fill layer with surface</button><button id="clearLayer">Clear current layer</button><button id="undo">Undo last stroke</button></div>
+<div class="group wide"><hr><p class="help">Surface IDs 0–8 refer to the existing WebSonic mesh. The editor preserves the level's mesh path and exports the same <code>data[y][z][x]</code> structure the engine reads.</p><p class="status" id="status" role="status">Ready. Load the factory map to begin.</p></div>
+</div></aside>
+</div>
+</main>
+<script>
+(()=> {
+const canvas=document.getElementById('map'),ctx=canvas.getContext('2d');
+const layerInput=document.getElementById('layer'),status=document.getElementById('status');
+const palette=['#5b7897','#a7b7c8','#668b9e','#d0a45e','#647b91','#b47b56','#8c7db6','#5f9e83','#c16b78'];
+let level={name:"Eggman's Factory — Blockout 01",mesh:"mesh/lvl0.jsonmesh",data:[]};
+let selected=0,dragging=false,undoStack=[],lastCell='';
+const $=id=>document.getElementById(id);
+function blankData(h=5,d=24,w=24){return Array.from({length:h},()=>Array.from({length:d},()=>Array(w).fill(null)))}
+function setStatus(s){status.textContent=s}
+function normalize(obj){
+ if(!obj||!Array.isArray(obj.data)||!obj.data.length||!Array.isArray(obj.data[0])||!Array.isArray(obj.data[0][0]))throw Error('This file does not look like a WebSonic level.');
+ const w=obj.data[0][0].length,d=obj.data[0].length;
+ if(!w||!d||obj.data.some(a=>!Array.isArray(a)||a.length!==d||a.some(row=>!Array.isArray(row)||row.length!==w)))throw Error('The map layers must all have the same dimensions.');
+ return {name:obj.name||'Untitled level',mesh:obj.mesh||'mesh/lvl0.jsonmesh',data:obj.data.map(a=>a.map(row=>row.slice()))};
+}
+function dims(){return {h:level.data.length,d:level.data[0]?.length||0,w:level.data[0]?.[0]?.length||0}}
+function count(arr){return arr.reduce((n,a)=>n+a.reduce((m,row)=>m+row.filter(v=>v!==null).length,0),0)}
+function saveUndo(){undoStack.push(JSON.stringify(level));if(undoStack.length>40)undoStack.shift();$('undo').disabled=false}
+function update(){
+ const {h,d,w}=dims(),y=+layerInput.value;
+ $('levelName').value=level.name;$('layerTitle').textContent='Layer '+y+' · Top-down view';
+ $('layerReadout').textContent=y+' / '+(h-1);$('gridSize').textContent=w+' × '+d+' tiles · '+h+' layers';
+ $('tileCount').textContent=count(level.data);$('layerCount').textContent=count([level.data[y]]);
+ $('undo').disabled=!undoStack.length;draw();
+}
+function draw(){
+ const {d,w}=dims(),y=+layerInput.value;
+ const cell=Math.max(18,Math.min(30,Math.floor(760/Math.max(w,d))));
+ canvas.width=w*cell+42;canvas.height=d*cell+42;
+ ctx.fillStyle='#0b1421';ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.font='10px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
+ for(let z=0;z<d;z++)for(let x=0;x<w;x++){
+  const v=level.data[y][z][x],px=30+x*cell,pz=12+z*cell;
+  ctx.fillStyle=v===null?'#152235':palette[v]||'#fff';ctx.fillRect(px+1,pz+1,cell-2,cell-2);
+  if(v!==null){ctx.fillStyle='#07111dcc';ctx.font='bold 10px system-ui';ctx.fillText(v,px+cell/2,pz+cell/2)}
+  ctx.strokeStyle='#34465d';ctx.lineWidth=1;ctx.strokeRect(px,pz,cell,cell);
+ }
+ ctx.fillStyle='#8ea4bf';ctx.font='10px system-ui';
+ for(let x=0;x<w;x++)if(x%2===0)ctx.fillText(x,30+x*cell+cell/2,5);
+ for(let z=0;z<d;z++)if(z%2===0)ctx.fillText(z,14,12+z*cell+cell/2);
+}
+function paintAt(e){
+ const r=canvas.getBoundingClientRect(),scaleX=canvas.width/r.width,scaleY=canvas.height/r.height;
+ const px=(e.clientX-r.left)*scaleX,py=(e.clientY-r.top)*scaleY;
+ const {w,d}=dims(),cell=(canvas.width-42)/w,x=Math.floor((px-30)/cell),z=Math.floor((py-12)/cell);
+ if(x<0||z<0||x>=w||z>=d)return;
+ const key=x+','+z;if(key===lastCell)return;lastCell=key;
+ const brush=+$('brush').value,erase=$('tool').value==='erase';
+ let changed=false;
+ for(let zz=z;zz<Math.min(d,z+brush);zz++)for(let xx=x;xx<Math.min(w,x+brush);xx++){
+  const val=erase?null:selected;if(level.data[+layerInput.value][zz][xx]!==val){level.data[+layerInput.value][zz][xx]=val;changed=true}
+ }
+ if(changed){draw();$('layerCount').textContent=count([level.data[+layerInput.value]]);$('tileCount').textContent=count(level.data)}
+}
+canvas.addEventListener('pointerdown',e=>{saveUndo();dragging=true;lastCell='';canvas.setPointerCapture(e.pointerId);paintAt(e)});
+canvas.addEventListener('pointermove',e=>{if(dragging)paintAt(e)});
+canvas.addEventListener('pointerup',()=>{dragging=false;lastCell=''});
+canvas.addEventListener('pointercancel',()=>{dragging=false;lastCell=''});
+function paletteUI(){
+ $('surfaces').innerHTML='';
+ palette.forEach((color,i)=>{const b=document.createElement('button');b.className='swatch';b.innerHTML='<span class="chip" style="background:'+color+'"></span><span>Surface '+i+'</span>';b.addEventListener('click',()=>{selected=i;document.querySelectorAll('.swatch').forEach(x=>x.style.outline='');b.style.outline='2px solid #fff';$('tool').value='paint'});$('surfaces').appendChild(b);if(i===0)b.style.outline='2px solid #fff'});
+}
+function setLayer(v){layerInput.value=Math.max(0,Math.min(dims().h-1,v));layerInput.max=dims().h-1;update()}
+$('levelName').addEventListener('change',e=>level.name=e.target.value);
+layerInput.addEventListener('input',update);
+$('prevLayer').onclick=()=>setLayer(+layerInput.value-1);$('nextLayer').onclick=()=>setLayer(+layerInput.value+1);
+$('fillLayer').onclick=()=>{saveUndo();level.data[+layerInput.value]=level.data[+layerInput.value].map(row=>row.map(()=>selected));update();setStatus('Filled layer '+layerInput.value+' with surface '+selected+'.')};
+$('clearLayer').onclick=()=>{saveUndo();level.data[+layerInput.value]=level.data[+layerInput.value].map(row=>row.map(()=>null));update();setStatus('Cleared layer '+layerInput.value+'.')};
+$('undo').onclick=()=>{if(!undoStack.length)return;level=JSON.parse(undoStack.pop());layerInput.max=level.data.length-1;layerInput.value=Math.min(+layerInput.value,level.data.length-1);update();setStatus('Last stroke undone.')};
+$('download').onclick=()=>{level.name=$('levelName').value;const blob=new Blob([JSON.stringify(level,null,2)+'\n'],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='eggmans-factory.jsonlevel';a.click();URL.revokeObjectURL(a.href);setStatus('Exported eggmans-factory.jsonlevel. Upload it to levels/ in the GitHub repo to publish it.')};
+$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{level=normalize(JSON.parse(await f.text()));undoStack=[];layerInput.value=0;layerInput.max=level.data.length-1;update();setStatus('Imported '+f.name+'.')}catch(err){setStatus('Import failed: '+err.message)}e.target.value=''};
+$('loadDefault').onclick=async()=>{try{const r=await fetch('../levels/eggmans-factory.jsonlevel',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);level=normalize(await r.json());undoStack=[];layerInput.value=0;layerInput.max=level.data.length-1;update();setStatus('Loaded the current Eggman’s Factory map from the repository.')}catch(e){setStatus('Could not load the default map. Try Import JSON with levels/eggmans-factory.jsonlevel. '+e.message)}};
+paletteUI();level.data=blankData(5,24,24);update();
+$('loadDefault').click();
+})();
+</script>
+</body></html>
