@@ -2,17 +2,35 @@
 
 Upstream project: https://github.com/coreh-deprecated/WebSonic
 
-## What we know
+## Integration approach
+
+The GitHub Pages workflow downloads WebSonic at the pinned upstream commit
+`356bf6ce9760076f060a458075219f2f22e2162a` and stages the complete upstream project
+under `engine/websonic/` in the Pages build artifact. This keeps the original test
+scene separate from the Reign of Metal landing page and avoids silently changing
+or misrepresenting upstream files.
+
+After the Pages workflow succeeds, the original engine test scene will be available at:
+
+`/Reign-of-Metal/engine/websonic/`
+
+The landing page links to that test scene. It is an upstream demo, not playable
+Reign of Metal content. We still need to test it in current Chrome/Chromium and
+fix any compatibility problems before building the first original level.
+
+## What WebSonic is
 
 WebSonic is a 2010 JavaScript engine using WebGL. Its original README describes:
 - 3D Sonic-style physics generalized to three dimensions
 - JSON-based tile maps
-- Custom JSON mesh format and vertex-based animation
+- A custom JSON mesh format and vertex-based animation
 - Sylvester for matrix/vector math
 - Ray/triangle intersection as its collision method
 - Keyboard controls designed for the original demo
 
-The upstream author explicitly describes the code as unfinished, messy, and poorly documented. Known issues include unstable matrix inversion and broken shadow behavior under some camera configurations.
+The upstream author explicitly describes the code as unfinished, messy, and poorly
+documented. Known issues include unstable matrix inversion and broken shadow
+behavior under some camera configurations.
 
 ## Licensing
 
@@ -21,21 +39,22 @@ The upstream LICENSE distinguishes between:
 - Models and textures (`mesh/`, `texture/`): CC BY-NC. These are non-commercial assets and have separate attribution requirements.
 - Bundled third-party libraries: retain their respective notices.
 
-Do not copy the upstream models or textures into this project without reviewing their CC BY-NC terms and adding required attribution. Do not assume every file has the same license.
+The workflow preserves the upstream `LICENSE` file and stages the upstream files
+unchanged. This project is intended to remain non-commercial. Do not treat every
+upstream file as MIT-licensed or present upstream models/textures as original work.
 
-## Integration checklist
+## Next engineering steps
 
-- [ ] Bring in the MIT-licensed engine source and preserve its license notice.
-- [ ] Audit old browser APIs and script loading.
-- [ ] Verify WebGL context creation on current Chrome/Chromium.
-- [ ] Verify all engine asset paths on GitHub Pages (case-sensitive).
-- [ ] Get the original test scene rendering.
+- [ ] Run the deployed original test scene on current Chrome/Chromium.
+- [ ] Check browser console and network requests for failed resources.
+- [ ] Verify WebGL context creation and shader compilation.
 - [ ] Test movement, jumping, camera rotation, and collisions.
-- [ ] Add responsive keyboard/gamepad/touch controls without breaking the original input.
-- [ ] Build an original Eggman's Factory level.
-- [ ] Create or source game assets with appropriate licenses.
-- [ ] Add a game loop, pause menu, save data, and character selection.
+- [ ] Test performance on a Chromebook.
+- [ ] Replace the old controls with configurable keyboard/gamepad/touch controls.
+- [ ] Build an original Eggman's Factory level and original/appropriately licensed assets.
+- [ ] Add the game's own pause menu, save data, and character selection.
 
 ## Important
 
-The landing page in this repository is only the project shell. It does not pretend that the WebSonic engine has been integrated or that gameplay is already working.
+The root landing page is only the project shell. The upstream test scene is a
+technical integration check, not a playable Reign of Metal demo.
