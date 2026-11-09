@@ -17,7 +17,7 @@ A browser-based Sonic fan game project by HedgePlays2.
 
 This project is planned to use [WebSonic](https://github.com/coreh-deprecated/WebSonic), a JavaScript/WebGL Sonic engine originally released by Marco Aurélio "Mark the Echidna" in 2010.
 
-WebSonic is an old, unfinished engine. Before building the full game, we need to integrate it, test it in modern browsers, and identify compatibility and performance issues. See [ENGINE.md](ENGINE.md).
+WebSonic is an old, unfinished engine. The GitHub Pages workflow now stages the pinned upstream project under `engine/websonic/`, including its original test scene and license notices. Once deployment succeeds, open the [WebSonic test scene](engine/websonic/). This is an upstream technical test, not Reign of Metal gameplay. See [ENGINE.md](ENGINE.md) for the integration and licensing details.
 
 ## Running
 
