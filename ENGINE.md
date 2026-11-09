@@ -67,3 +67,7 @@ upstream file as MIT-licensed or present upstream models/textures as original wo
 
 The root landing page is only the project shell. The WebSonic scene now loads the
 first Reign of Metal level blockout, but it is not yet a finished playable demo.
+
+## Browser level editor
+
+A lightweight browser-based tile-map editor is available at `tools/level-editor.html` and is linked from the project home page. It loads `levels/eggmans-factory.jsonlevel`, lets you paint or erase WebSonic surface IDs across individual height layers, supports import/export, and downloads an updated `.jsonlevel` file. It does not write to GitHub automatically: upload the exported file to `levels/eggmans-factory.jsonlevel` to publish your edits. The editor preserves the WebSonic `data[y][z][x]` layout and mesh path.
