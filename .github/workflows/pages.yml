@@ -54,6 +54,14 @@ jobs:
           cp assets/factory-wall.svg engine/websonic/texture/reign-factory-wall.svg
           python3 - <<'PY'
           from pathlib import Path
+          loader = Path("engine/websonic/js/ResourceManager.js")
+          loader_source = loader.read_text()
+          needle = '\\t\\t\\tcase "bmp":'
+          if loader_source.count(needle) != 1:
+              raise SystemExit("Unexpected WebSonic resource loader; refusing unsafe SVG patch")
+          loader_source = loader_source.replace(needle, '\\t\\t\\tcase "svg": // Reign of Metal vector textures\\n' + needle)
+          loader.write_text(loader_source)
+          print("Enabled SVG texture loading in WebSonic ResourceManager")
           mesh = Path("engine/websonic/mesh/lvl0.jsonmesh")
           source = mesh.read_text()
           floor_old = '"texture/wall.png"'
