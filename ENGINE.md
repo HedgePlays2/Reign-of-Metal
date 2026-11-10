@@ -13,6 +13,13 @@ The repository now also contains the first Reign of Metal level file at
 map as WebSonic's starting level (`engine/websonic/level/lvl0.jsonlevel`), so the
 engine opens directly into the **Eggman's Factory — Blockout 01** layout.
 
+The deployment also replaces the demo's stone-like diffuse textures with two original
+Reign of Metal SVG materials: a bolted steel floor with hazard markings and
+industrial wall panels with vents, warning stripes, and red machine indicators.
+The upstream mesh geometry is retained; only its diffuse texture paths are
+rewired during the Pages build. The original upstream ghost maps and license
+notices remain in place.
+
 The blockout is an early greybox built from WebSonic's existing tile surfaces.
 It includes a broad factory floor, perimeter walls, raised service platforms,
 an overhead maintenance catwalk, interior divider panels, and a central
