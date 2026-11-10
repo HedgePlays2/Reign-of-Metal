@@ -45,6 +45,27 @@ jobs:
           test -f engine/websonic/index.html
           echo "WebSonic source staged from ${WEBSONIC_COMMIT}"
 
+      - name: Install Reign of Metal factory materials
+        run: |
+          set -euo pipefail
+          test -f assets/factory-floor.svg
+          test -f assets/factory-wall.svg
+          cp assets/factory-floor.svg engine/websonic/texture/reign-factory-floor.svg
+          cp assets/factory-wall.svg engine/websonic/texture/reign-factory-wall.svg
+          python3 - <<'PY'
+          from pathlib import Path
+          mesh = Path("engine/websonic/mesh/lvl0.jsonmesh")
+          source = mesh.read_text()
+          floor_old = '"texture/wall.png"'
+          wall_old = '"texture/wall2.png"'
+          if source.count(floor_old) != 1 or source.count(wall_old) != 8:
+              raise SystemExit("Unexpected WebSonic mesh texture layout; refusing unsafe replacement")
+          source = source.replace(floor_old, '"texture/reign-factory-floor.svg"')
+          source = source.replace(wall_old, '"texture/reign-factory-wall.svg"')
+          mesh.write_text(source)
+          print("Applied Reign of Metal floor and wall materials to WebSonic surfaces")
+          PY
+
       - name: Install Reign of Metal level blockout
         run: |
           set -euo pipefail
