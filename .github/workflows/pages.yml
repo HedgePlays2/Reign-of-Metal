@@ -56,10 +56,10 @@ jobs:
           from pathlib import Path
           loader = Path("engine/websonic/js/ResourceManager.js")
           loader_source = loader.read_text()
-          needle = '\\t\\t\\tcase "bmp":'
+          needle = 'case "bmp":'
           if loader_source.count(needle) != 1:
-              raise SystemExit("Unexpected WebSonic resource loader; refusing unsafe SVG patch")
-          loader_source = loader_source.replace(needle, '\\t\\t\\tcase "svg": // Reign of Metal vector textures\\n' + needle)
+              raise SystemExit("Unexpected WebSonic resource loader; refusing safe SVG patch")
+          loader_source = loader_source.replace(needle, 'case "svg": // Reign of Metal vector textures\\n\\t\\t\\t' + needle)
           loader.write_text(loader_source)
           print("Enabled SVG texture loading in WebSonic ResourceManager")
           mesh = Path("engine/websonic/mesh/lvl0.jsonmesh")
