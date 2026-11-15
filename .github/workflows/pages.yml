@@ -81,6 +81,31 @@ jobs:
           cp levels/eggmans-factory.jsonlevel engine/websonic/level/lvl0.jsonlevel
           echo "Installed Eggman's Factory blockout as the WebSonic starting level"
 
+      - name: Install Reign of Metal gameplay systems
+        run: |
+          set -euo pipefail
+          test -f gameplay/reign-of-metal.js
+          cp gameplay/reign-of-metal.js engine/websonic/js/reign-of-metal.js
+          python3 - <<'PY'
+          from pathlib import Path
+          index = Path("engine/websonic/index.html")
+          html = index.read_text()
+          main_tag = '<script src="js/main.js"></script>'
+          if html.count(main_tag) != 1:
+              raise SystemExit("Unexpected WebSonic script layout; refusing gameplay script patch")
+          html = html.replace(main_tag, '<script src="js/reign-of-metal.js"></script>\\n  ' + main_tag)
+          index.write_text(html)
+
+          main = Path("engine/websonic/js/main.js")
+          source = main.read_text()
+          player_add = 'engine.world.add(player);'
+          if source.count(player_add) != 1:
+              raise SystemExit("Unexpected WebSonic player initialization; refusing gameplay hook patch")
+          source = source.replace(player_add, player_add + '\\n\\t\\t\\t\\t\\t\\t\\tif (window.ReignOfMetal) window.ReignOfMetal.start(engine, player);')
+          main.write_text(source)
+          print("Installed Reign of Metal collectible-ring gameplay")
+          PY
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
