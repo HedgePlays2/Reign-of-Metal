@@ -66,6 +66,8 @@ upstream file as MIT-licensed or present upstream models/textures as original wo
 - [ ] Check browser console and network requests for failed resources.
 - [ ] Verify WebGL context creation and shader compilation.
 - [ ] Test performance on a Chromebook.
+- [x] Add the first original gameplay system: a ten-ring collectible trail with score and objective HUD.
+- [ ] Add hazards, enemies, checkpoints, and a level exit.
 - [ ] Replace placeholder/upstream environment art with original or appropriately licensed factory assets.
 - [ ] Replace the old controls with configurable keyboard/gamepad/touch controls.
 - [ ] Add the game's own pause menu, save data, and character selection.
