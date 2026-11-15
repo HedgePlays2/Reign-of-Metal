@@ -93,7 +93,7 @@ jobs:
           main_tag = '<script src="js/main.js"></script>'
           if html.count(main_tag) != 1:
               raise SystemExit("Unexpected WebSonic script layout; refusing gameplay script patch")
-          html = html.replace(main_tag, '<script src="js/reign-of-metal.js"></script>\\n  ' + main_tag)
+          html = html.replace(main_tag, '<script src="js/reign-of-metal.js"></script>' + chr(10) + '  ' + main_tag)
           index.write_text(html)
 
           main = Path("engine/websonic/js/main.js")
@@ -101,7 +101,7 @@ jobs:
           player_add = 'engine.world.add(player);'
           if source.count(player_add) != 1:
               raise SystemExit("Unexpected WebSonic player initialization; refusing gameplay hook patch")
-          source = source.replace(player_add, player_add + '\\n\\t\\t\\t\\t\\t\\t\\tif (window.ReignOfMetal) window.ReignOfMetal.start(engine, player);')
+          source = source.replace(player_add, player_add + chr(10) + chr(9) * 7 + 'if (window.ReignOfMetal) window.ReignOfMetal.start(engine, player);')
           main.write_text(source)
           print("Installed Reign of Metal collectible-ring gameplay")
           PY
