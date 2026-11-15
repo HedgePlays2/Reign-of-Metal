@@ -62,12 +62,14 @@ upstream file as MIT-licensed or present upstream models/textures as original wo
 - [x] Deploy WebSonic and confirm the original engine scene loads.
 - [x] Test Sonic's movement and physics in the engine.
 - [x] Create the first Eggman's Factory tile-map blockout.
-- [ ] Test the new factory layout in Chrome/Chromium, especially the start point, platforms, and trench.
+- [ ] Test the raised perimeter walls and service openings in Chrome/Chromium, especially the start point, platforms, and trench.
 - [ ] Check browser console and network requests for failed resources.
 - [ ] Verify WebGL context creation and shader compilation.
 - [ ] Test performance on a Chromebook.
 - [x] Add the first original gameplay system: a ten-ring collectible trail with score and objective HUD.
-- [ ] Add hazards, enemies, checkpoints, and a level exit.
+- [ ] Add conveyor-belt sections with player movement interaction (no crushers).
+- [ ] Add moving platforms and spring launchers after verifying WebSonic's collision/update hooks.
+- [ ] Add laser gates, checkpoints, enemies, and a level exit (no crushers).
 - [ ] Replace placeholder/upstream environment art with original or appropriately licensed factory assets.
 - [ ] Replace the old controls with configurable keyboard/gamepad/touch controls.
 - [ ] Add the game's own pause menu, save data, and character selection.
