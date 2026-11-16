@@ -57,9 +57,9 @@
     // Reuse WebSonic's native Spring object and spring mesh.
     // Spring.js handles the launch impulse and STATE_SPRING animation.
     var springSpots = [
-      [1080, 0, 160],
-      [1510, 0, 160],
-      [1940, 0, 160]
+      [1024, 0, 160],
+      [1280, 0, 160],
+      [1536, 0, 160]
     ];
     if (typeof Spring === "function") {
       springSpots.forEach(function (spot) {
@@ -69,6 +69,24 @@
       });
     } else {
       console.warn("WebSonic Spring.js was not loaded; factory springs were skipped.");
+    }
+
+    // Static factory control monitors add visual landmarks to the otherwise
+    // open assembly floor. The upstream monitor mesh is already loaded by WebSonic.
+    var monitorMesh = engine.resources.get("mesh/monitor.jsonmesh");
+    var monitorSpots = [
+      [320, 24, 320],
+      [1408, 24, 320],
+      [320, 24, 1408],
+      [1408, 24, 1408]
+    ];
+    if (monitorMesh) {
+      monitorSpots.forEach(function (spot) {
+        var monitor = engine.world.MeshEntity(monitorMesh);
+        monitor.position($V(spot));
+        monitor.scale($V([1.35, 1.35, 1.35]));
+        engine.world.add(monitor);
+      });
     }
 
     var ringMesh = engine.resources.get("mesh/ring.jsonmesh");
@@ -92,7 +110,7 @@
     }
 
     updateHud();
-    console.log("Reign of Metal gameplay started: " + totalRings + " collectible rings and " + springSpots.length + " native springs placed.");
+    console.log("Reign of Metal gameplay started: " + totalRings + " collectible rings, " + springSpots.length + " native springs, and " + monitorSpots.length + " factory monitors placed.");
   }
 
   global.ReignOfMetal = { start: start };
