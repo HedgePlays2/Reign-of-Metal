@@ -1,16 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
 <defs>
- <pattern id="hazard" width="32" height="32" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="16" height="32" fill="#e7b52f"/><rect x="16" width="16" height="32" fill="#20262d"/></pattern>
- <linearGradient id="steel" x2="0" y2="1"><stop stop-color="#64717c"/><stop offset=".48" stop-color="#303b45"/><stop offset="1" stop-color="#1c252d"/></linearGradient>
+ <linearGradient id="steel" x2="0" y2="1"><stop stop-color="#82909a"/><stop offset=".18" stop-color="#4a5863"/><stop offset=".52" stop-color="#303b45"/><stop offset="1" stop-color="#18232c"/></linearGradient>
+ <pattern id="grate" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M0 0L24 24M24 0L0 24" stroke="#9ba8b0" stroke-width="3" opacity=".28"/></pattern>
+ <pattern id="hazard" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="28" fill="#f0bd32"/><rect x="14" width="14" height="28" fill="#202830"/></pattern>
+ <linearGradient id="glow" x2="0" y2="1"><stop stop-color="#7fffe0"/><stop offset="1" stop-color="#087d78"/></linearGradient>
 </defs>
-<rect width="512" height="512" fill="#202a33"/>
-<rect x="8" y="8" width="496" height="496" rx="8" fill="url(#steel)" stroke="#9aa6ad" stroke-width="8"/>
-<path d="M16 170H496M16 342H496M170 16V496M342 16V496" stroke="#101820" stroke-width="12"/>
-<path d="M22 22H158V158H22ZM354 22H490V158H354ZM22 354H158V490H22ZM354 354H490V490H354Z" fill="none" stroke="#8b969e" stroke-width="4"/>
-<path d="M185 22H327V40H185ZM185 472H327V490H185ZM22 185H40V327H22ZM472 185H490V327H472Z" fill="url(#hazard)" stroke="#101820" stroke-width="3"/>
-<g fill="#d6dde0" stroke="#18212a" stroke-width="4"><circle cx="28" cy="28" r="7"/><circle cx="484" cy="28" r="7"/><circle cx="28" cy="484" r="7"/><circle cx="484" cy="484" r="7"/><circle cx="256" cy="28" r="7"/><circle cx="256" cy="484" r="7"/><circle cx="28" cy="256" r="7"/><circle cx="484" cy="256" r="7"/></g>
-<g stroke="#aeb8bf" stroke-width="3" opacity=".55"><path d="M55 55H145M55 75H145M55 95H145M367 55H457M367 75H457M367 95H457M55 367H145M55 387H145M55 407H145M367 367H457M367 387H457M367 407H457"/></g>
-<rect x="190" y="190" width="132" height="132" rx="8" fill="#29343d" stroke="#87939c" stroke-width="8"/>
-<path d="M210 256H302M256 210V302" stroke="#596772" stroke-width="6"/>
-<circle cx="256" cy="256" r="18" fill="#d13c31" stroke="#f0c04b" stroke-width="6"/>
+<rect width="512" height="512" fill="#17212a"/>
+<rect x="7" y="7" width="498" height="498" rx="10" fill="url(#steel)" stroke="#aab5bc" stroke-width="7"/>
+<rect x="23" y="23" width="466" height="466" rx="5" fill="url(#grate)" stroke="#111a22" stroke-width="9"/>
+<path d="M22 128H490M22 384H490M128 22V490M384 22V490" stroke="#121b23" stroke-width="15"/>
+<path d="M30 136H482M30 376H482M136 30V482M376 30V482" stroke="#87949d" stroke-width="3" opacity=".7"/>
+<path d="M151 30H361V48H151ZM151 464H361V482H151ZM30 151H48V361H30ZM464 151H482V361H464Z" fill="url(#hazard)" stroke="#101820" stroke-width="3"/>
+<rect x="164" y="164" width="184" height="184" rx="12" fill="#202b34" stroke="#9ba8b0" stroke-width="9"/>
+<rect x="180" y="180" width="152" height="152" rx="5" fill="#26343d" stroke="#111a22" stroke-width="5"/>
+<path d="M190 256H322M256 190V322" stroke="#5d6c76" stroke-width="5"/>
+<circle cx="256" cy="256" r="37" fill="#17232c" stroke="#d7e0e3" stroke-width="5"/>
+<circle cx="256" cy="256" r="22" fill="#c9322d" stroke="#f2c447" stroke-width="7"/>
+<circle cx="256" cy="256" r="7" fill="#fff1a6"/>
+<g fill="#dbe2e5" stroke="#121b23" stroke-width="4">
+ <circle cx="28" cy="28" r="8"/><circle cx="484" cy="28" r="8"/><circle cx="28" cy="484" r="8"/><circle cx="484" cy="484" r="8"/>
+ <circle cx="256" cy="28" r="7"/><circle cx="256" cy="484" r="7"/><circle cx="28" cy="256" r="7"/><circle cx="484" cy="256" r="7"/>
+ <circle cx="146" cy="146" r="6"/><circle cx="366" cy="146" r="6"/><circle cx="146" cy="366" r="6"/><circle cx="366" cy="366" r="6"/>
+</g>
+<g fill="url(#glow)" stroke="#10252a" stroke-width="4"><rect x="64" y="64" width="52" height="12" rx="5"/><rect x="396" y="64" width="52" height="12" rx="5"/><rect x="64" y="436" width="52" height="12" rx="5"/><rect x="396" y="436" width="52" height="12" rx="5"/></g>
+<g fill="#dbe4e8" opacity=".72" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="2"><text x="256" y="102" text-anchor="middle">EGGMAN INDUSTRIES</text><text x="256" y="420" text-anchor="middle">ASSEMBLY DECK / 01</text></g>
+<g stroke="#f0bd32" stroke-width="5" opacity=".85"><path d="M72 210H112M72 222H112M400 290H440M400 302H440"/></g>
 </svg>
