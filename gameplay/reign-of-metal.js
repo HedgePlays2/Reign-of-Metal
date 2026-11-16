@@ -54,6 +54,23 @@
       if (originalScore) originalScore.textContent = score;
     }
 
+    // Reuse WebSonic's native Spring object and spring mesh.
+    // Spring.js handles the launch impulse and STATE_SPRING animation.
+    var springSpots = [
+      [1080, 0, 160],
+      [1510, 0, 160],
+      [1940, 0, 160]
+    ];
+    if (typeof Spring === "function") {
+      springSpots.forEach(function (spot) {
+        var spring = new Spring(engine, player);
+        spring.position($V(spot));
+        engine.world.add(spring);
+      });
+    } else {
+      console.warn("WebSonic Spring.js was not loaded; factory springs were skipped.");
+    }
+
     var ringMesh = engine.resources.get("mesh/ring.jsonmesh");
     for (var i = 0; i < totalRings; i++) {
       (function (index) {
@@ -75,7 +92,7 @@
     }
 
     updateHud();
-    console.log("Reign of Metal gameplay started: " + totalRings + " collectible rings placed.");
+    console.log("Reign of Metal gameplay started: " + totalRings + " collectible rings and " + springSpots.length + " native springs placed.");
   }
 
   global.ReignOfMetal = { start: start };
