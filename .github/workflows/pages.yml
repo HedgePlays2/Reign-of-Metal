@@ -102,8 +102,12 @@ jobs:
           if source.count(player_add) != 1:
               raise SystemExit("Unexpected WebSonic player initialization; refusing gameplay hook patch")
           source = source.replace(player_add, player_add + chr(10) + chr(9) * 7 + 'if (window.ReignOfMetal) window.ReignOfMetal.start(engine, player);')
+          default_spring = 'engine.world.add(new Spring(engine, player));'
+          if source.count(default_spring) != 1:
+              raise SystemExit("Unexpected WebSonic default spring setup; refusing spring placement patch")
+          source = source.replace(default_spring, '// Reign of Metal places native springs along the factory route.')
           main.write_text(source)
-          print("Installed Reign of Metal collectible-ring gameplay")
+          print("Installed Reign of Metal rings and route-based native springs")
           PY
 
       - name: Upload Pages artifact
