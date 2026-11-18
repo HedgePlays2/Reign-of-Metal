@@ -76,15 +76,17 @@
     var monitorMesh = engine.resources.get("mesh/monitor.jsonmesh");
     var monitorSpots = [
       [320, 24, 320],
+      [864, 24, 320],
       [1408, 24, 320],
       [320, 24, 1408],
+      [864, 24, 1408],
       [1408, 24, 1408]
     ];
     if (monitorMesh) {
       monitorSpots.forEach(function (spot) {
         var monitor = engine.world.MeshEntity(monitorMesh);
         monitor.position($V(spot));
-        monitor.scale($V([1.35, 1.35, 1.35]));
+        monitor.scale($V([1.55, 1.55, 1.55]));
         engine.world.add(monitor);
       });
     }
