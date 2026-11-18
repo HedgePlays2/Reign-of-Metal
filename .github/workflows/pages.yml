@@ -59,8 +59,10 @@ jobs:
           needle = 'case "bmp":'
           if loader_source.count(needle) != 1:
               raise SystemExit("Unexpected WebSonic resource loader; refusing safe SVG patch")
-          loader_source = loader_source.replace(needle, 'case "svg": // Reign of Metal vector textures\\n\\t\\t\\t' + needle)
+          loader_source = loader_source.replace(needle, 'case "svg": // Reign of Metal vector textures' + chr(10) + chr(9) * 3 + needle)
           loader.write_text(loader_source)
+          if 'case "svg":' not in loader_source:
+              raise SystemExit("SVG image loader case was not installed")
           print("Enabled SVG texture loading in WebSonic ResourceManager")
           mesh = Path("engine/websonic/mesh/lvl0.jsonmesh")
           source = mesh.read_text()
