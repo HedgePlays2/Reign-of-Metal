@@ -69,8 +69,10 @@ jobs:
           source = source.replace(floor_old, '"texture/reign-factory-floor.png"')
           source = source.replace(wall_old, '"texture/reign-factory-wall.png"')
           mesh.write_text(source)
-          import json
-          json.loads(source)
+          # WebSonic mesh files use JSON-like syntax with trailing commas.
+          # Validate material substitutions directly instead of strict JSON parsing.
+          if source.count('"texture/reign-factory-floor.png"') != 1 or source.count('"texture/reign-factory-wall.png"') != 8:
+              raise SystemExit("Factory material assignments did not apply correctly")
           print("Rendered factory SVG artwork to WebGL-compatible PNG textures")
           print("Verified 1 floor material and 8 wall material assignments")
           PY
