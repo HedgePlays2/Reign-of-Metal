@@ -50,30 +50,29 @@ jobs:
           set -euo pipefail
           test -f assets/factory-floor.svg
           test -f assets/factory-wall.svg
-          cp assets/factory-floor.svg engine/websonic/texture/reign-factory-floor.svg
-          cp assets/factory-wall.svg engine/websonic/texture/reign-factory-wall.svg
+          python3 -m pip install --disable-pip-version-check --quiet cairosvg
           python3 - <<'PY'
           from pathlib import Path
-          loader = Path("engine/websonic/js/ResourceManager.js")
-          loader_source = loader.read_text()
-          needle = 'case "bmp":'
-          if loader_source.count(needle) != 1:
-              raise SystemExit("Unexpected WebSonic resource loader; refusing safe SVG patch")
-          loader_source = loader_source.replace(needle, 'case "svg": // Reign of Metal vector textures' + chr(10) + chr(9) * 3 + needle)
-          loader.write_text(loader_source)
-          if 'case "svg":' not in loader_source:
-              raise SystemExit("SVG image loader case was not installed")
-          print("Enabled SVG texture loading in WebSonic ResourceManager")
+          import cairosvg
+          floor = Path("assets/factory-floor.svg")
+          wall = Path("assets/factory-wall.svg")
+          texture_dir = Path("engine/websonic/texture")
+          texture_dir.mkdir(parents=True, exist_ok=True)
+          cairosvg.svg2png(url=str(floor), write_to=str(texture_dir / "reign-factory-floor.png"), output_width=512, output_height=512)
+          cairosvg.svg2png(url=str(wall), write_to=str(texture_dir / "reign-factory-wall.png"), output_width=512, output_height=512)
           mesh = Path("engine/websonic/mesh/lvl0.jsonmesh")
           source = mesh.read_text()
           floor_old = '"texture/wall.png"'
           wall_old = '"texture/wall2.png"'
           if source.count(floor_old) != 1 or source.count(wall_old) != 8:
               raise SystemExit("Unexpected WebSonic mesh texture layout; refusing unsafe replacement")
-          source = source.replace(floor_old, '"texture/reign-factory-floor.svg"')
-          source = source.replace(wall_old, '"texture/reign-factory-wall.svg"')
+          source = source.replace(floor_old, '"texture/reign-factory-floor.png"')
+          source = source.replace(wall_old, '"texture/reign-factory-wall.png"')
           mesh.write_text(source)
-          print("Applied Reign of Metal floor and wall materials to WebSonic surfaces")
+          import json
+          json.loads(source)
+          print("Rendered factory SVG artwork to WebGL-compatible PNG textures")
+          print("Verified 1 floor material and 8 wall material assignments")
           PY
 
       - name: Install Reign of Metal level blockout
