@@ -14,8 +14,9 @@ map as WebSonic's starting level (`engine/websonic/level/lvl0.jsonlevel`), so th
 engine opens directly into the **Eggman's Factory — Blockout 01** layout.
 
 The deployment also replaces the demo's stone-like diffuse textures with two original
-Reign of Metal SVG materials: a bolted steel floor with hazard markings and
-industrial wall panels with vents, warning stripes, and red machine indicators.
+Reign of Metal SVG materials: a bolted steel floor with hazard markings, panel seams,
+and service-deck markings; and industrial wall panels dressed with a large turbine
+housing, control screens, pipework, warning lamps, vent banks, and sector signage.
 The upstream mesh geometry is retained; only its diffuse texture paths are
 rewired during the Pages build. The original upstream ghost maps and license
 notices remain in place.
@@ -70,7 +71,8 @@ upstream file as MIT-licensed or present upstream models/textures as original wo
 - [ ] Add conveyor-belt sections with player movement interaction (no crushers).
 - [ ] Add moving platforms and spring launchers after verifying WebSonic's collision/update hooks.
 - [ ] Add laser gates, checkpoints, enemies, and a level exit (no crushers).
-- [ ] Replace placeholder/upstream environment art with original or appropriately licensed factory assets.
+- [x] Replace the default floor and wall diffuse materials with original Reign of Metal factory artwork.
+- [ ] Replace remaining placeholder/upstream environment geometry with original or appropriately licensed factory assets.
 - [ ] Replace the old controls with configurable keyboard/gamepad/touch controls.
 - [ ] Add the game's own pause menu, save data, and character selection.
 
